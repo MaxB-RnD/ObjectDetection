@@ -25,18 +25,13 @@ The system uses a lightweight convolutional neural network trained on a custom d
 - Real-time detection pipeline functional and tested on live video feed.  
 
 
-### Steps to Make a Virtual Enviroment
-#### Step 1: Create the Virtual Environment
-**Navigate to your Git repository in the terminal:**
-*cd path/to/your/git/repo*
+## Steps to Make a Virtual Enviroment
+### Step 1: Create the Virtual Environment
+- Navigate to your Git repository in the terminal: *cd path/to/your/git/repo*
+- Create the virtual environment (e.g., venv): *python3 -m venv venv*
+- This will create a venv folder inside your repository.
 
-**Create the virtual environment (e.g., venv):**
-*python3 -m venv venv*
-
-This will create a venv folder inside your repository.
-
-
-#### Step 2: Add venv to .gitignore
+### Step 2: Add venv to .gitignore
 You don’t want to commit your virtual environment to Git because it can be large and system-dependent.
 **Open or create a .gitignore file in the root of your repository:**
 *nano .gitignore*
@@ -54,7 +49,7 @@ You don’t want to commit your virtual environment to Git because it can be lar
 The venv/ folder should not appear in the list of files to be staged.
 
 
-#### Step 3: Activate the Virtual Environment
+### Step 3: Activate the Virtual Environment
 **Activate the virtual environment whenever you’re working on the project:**
 *source venv/bin/activate*
 
@@ -62,7 +57,7 @@ The venv/ folder should not appear in the list of files to be staged.
 *(venv) user@your-computer:~/your-repo$*
 
 
-#### Step 4: Install Libraries
+### Step 4: Install Libraries
 **Install the libraries needed for your project:**
 *pip install opencv-python tensorflow mediapipe numpy pillow matplotlib seaborn*
 
