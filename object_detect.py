@@ -1,68 +1,53 @@
 import cv2
-import mediapipe as mp
+import numpy as np
 
-# Initialise MediaPipe Hands, which is a pre-trained model for hand landmark detection
-mp_hands = mp.solutions.hands
-mp_drawing = mp.solutions.drawing_utils
+# Load pre-trained hand detection model (Caffe/TF model or another DNN model)
+# Here, we use a sample pre-trained model for hand detection. You can replace it with any model you prefer.
+hand_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_hand.xml')
 
-# Open the webcam to capture frames (index 0 for the default camera)
+# Open webcam
 cap = cv2.VideoCapture(0)
 
-# Create a 'hands' object to process video frames and detect hand landmarks
-with mp_hands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.5) as hands:
-    
-    # Loop over the frames until the webcam is closed or an error occurs
-    while cap.isOpened():
-        # Read a frame from the webcam
-        ret, frame = cap.read()
-        
-        # If no frame was captured, exit the loop
-        if not ret:
-            break
-        
-        # Flip the frame horizontally to create a mirror effect for a natural view
-        frame = cv2.flip(frame, 1)
+# Function to check if the hand is in "Thumbs Up" or "Thumbs Down" position
+def analyze_gesture(thumb_tip, thumb_ip, index_mcp):
+    if thumb_tip[1] < index_mcp[1] and thumb_ip[1] < index_mcp[1]:
+        return "Thumbs Up"
+    elif thumb_tip[1] > index_mcp[1] and thumb_ip[1] > index_mcp[1]:
+        return "Thumbs Down"
+    else:
+        return "Neutral"
 
-        # Convert the frame from BGR (default in OpenCV) to RGB (used by MediaPipe)
-        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        
-        # Process the RGB frame to detect hands and hand landmarks
-        result = hands.process(rgb_frame)
+while cap.isOpened():
+    ret, frame = cap.read()
+    if not ret:
+        break
 
-        # If any hand landmarks are detected, proceed with further processing
-        if result.multi_hand_landmarks:
-            # Loop over the detected hands (in case multiple hands are detected)
-            for hand_landmarks in result.multi_hand_landmarks:
-                
-                # Draw the landmarks and connections on the frame (skeleton of the hand)
-                mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
-                
-                # Retrieve specific hand landmarks for gesture detection
-                thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
-                thumb_ip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_IP]
-                index_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP]
-                
-                # Analyze the relative positions of the thumb and index finger to detect the gesture
-                # Thumbs Up: thumb tip and thumb IP (Intermediate Phalanx) are above the MCP of the index finger
-                if thumb_tip.y < index_mcp.y and thumb_ip.y < index_mcp.y:
-                    gesture = "Thumbs Up"
-                # Thumbs Down: thumb tip and thumb IP are below the MCP of the index finger
-                elif thumb_tip.y > index_mcp.y and thumb_ip.y > index_mcp.y:
-                    gesture = "Thumbs Down"
-                # Neutral position if thumb is neither fully up nor down
-                else:
-                    gesture = "Neutral"
+    # Convert to grayscale for hand detection
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-                # Display the detected gesture (Thumbs Up/Down/Neutral) on the frame
-                cv2.putText(frame, gesture, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+    # Detect hands using the cascade classifier
+    hands = hand_cascade.detectMultiScale(gray, 1.1, 4)
 
-        # Display the frame with landmarks and the gesture detected
-        cv2.imshow("Thumbs Detector", frame)
-        
-        # Exit the loop when the 'Esc' key (key code 27) is pressed
-        if cv2.waitKey(5) & 0xFF == 27:
-            break
+    # If hands are detected, draw bounding box and analyze gesture
+    for (x, y, w, h) in hands:
+        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-# Release the webcam and close all OpenCV windows after the loop ends
+        # Placeholder for hand landmarks (you would use a model to extract real hand landmarks)
+        # Example of arbitrary positions for testing gesture detection
+        thumb_tip = (x + w//3, y + h//3)  # Simulating thumb tip position
+        thumb_ip = (x + w//3, y + 2*h//3)  # Simulating thumb IP position
+        index_mcp = (x + 2*w//3, y + h//2)  # Simulating index finger MCP position
+
+        # Analyze and display gesture
+        gesture = analyze_gesture(thumb_tip, thumb_ip, index_mcp)
+        cv2.putText(frame, gesture, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
+    # Display the frame
+    cv2.imshow("Hand Gesture Detector", frame)
+
+    if cv2.waitKey(1) & 0xFF == 27:  # Exit on 'Esc'
+        break
+
+# Release resources
 cap.release()
 cv2.destroyAllWindows()
