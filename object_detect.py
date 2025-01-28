@@ -2,14 +2,13 @@ import cv2
 
 # Load Haar cascades for face and smile detection
 # These are pre-trained XML models included with OpenCV
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-smile_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_smile.xml")
+face_cascade = cv2.CascadeClassifier('/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.xml')
+smile_cascade = cv2.CascadeClassifier('/usr/share/opencv4/haarcascades/haarcascade_smile.xml')
+# face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+# smile_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_smile.xml")
 
 # Start video capture from the default camera (usually webcam)
 cap = cv2.VideoCapture(0)
-
-# Set the camera to capture at a lower frame rate (15 FPS) to reduce processing load
-cap.set(cv2.CAP_PROP_FPS, 15)
 
 # Initialise a frame counter to track which frame is being processed
 frame_count = 0
@@ -28,16 +27,12 @@ while True:
     # Convert the frame to grayscale as Haar cascades work with grayscale images
     gray_frame = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2GRAY)
 
-    # Perform face detection only on every 5th frame to reduce CPU usage
-    if frame_count % 5 == 0:
+    # Perform face detection
         # Detect faces in the grayscale frame
         # scaleFactor: Determines the reduction in size for each image scale
         # minNeighbors: Specifies how many neighbors each rectangle candidate should have to retain it
         # minSize: Minimum possible object size (to ignore small detections)
-        faces = face_cascade.detectMultiScale(gray_frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-    else:
-        # Skip detection on other frames to save computation time
-        faces = []
+    faces = face_cascade.detectMultiScale(gray_frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
     # Loop through all detected faces
     for (x, y, w, h) in faces:
