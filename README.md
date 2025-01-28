@@ -1,25 +1,14 @@
-# Thumbs Up/Down Detection on Jetson Nano  
-This project implements a real-time gesture detection system on NVIDIA's Jetson Nano. It classifies whether a person is showing a thumbs up or thumbs down gesture, optimized for edge deployment.  
+# Face and Smile Detection using OpenCV
+## Overview
+This project is a real-time face and smile detection application built with Python and OpenCV. It leverages Haar cascade classifiers to detect faces and smiles in a video feed, distinguishing them visually with color-coded rectangles. The program runs on devices like the Jetson Nano, making it an excellent introduction to computer vision and real-time image processing.
 
+## Key Components
+- **Haar Cascade Classifiers:** Pre-trained models for face (haarcascade_frontalface_default.xml) and smile detection (haarcascade_smile.xml).
+- **OpenCV Library:** Used for video capture, grayscale conversion, and real-time feature detection.
+- **Jetson Nano Compatibility:** Optimized for lightweight hardware, suitable for testing computer vision algorithms.
 
-## Overview  
-The system uses a lightweight convolutional neural network trained on a custom dataset of thumbs up and thumbs down gestures. It is designed to run efficiently on the Jetson Nano, leveraging its GPU capabilities for real-time inference.  
-
-
-### Key Components  
-- **Data Collection**: A custom dataset of gesture images collected using a standard webcam.  
-- **Model Architecture**: The model is based on a lightweight CNN, with options for transfer learning using MobileNet or ResNet for improved accuracy.  
-- **Training**: Includes scripts for preprocessing, model training, and evaluation.  
-- **Inference**: Real-time detection pipeline optimized for the Jetson Nano's hardware capabilities.  
-
-
-### Features  
-- **Custom Gesture Recognition**: Detects "thumbs up" and "thumbs down" gestures with high accuracy.  
-- **Edge Optimization**: Designed for real-time performance on the Jetson Nano.  
-- **Scalable**: Easily adaptable to recognize additional gestures or objects.  
-
-
-### Current Progress  
-- Dataset creation and labeling completed.  
-- Model trained with >90% accuracy on validation data.  
-- Real-time detection pipeline functional and tested on live video feed.<br/><br/>  
+## Features
+- **Real-Time Detection:** Detects faces and smiles in a live video feed.
+- **Color-Coded Visualization:** Blue rectangles for faces. Green rectangles for smiles.
+- **Customizable Detection Parameters:** Adjust sensitivity and accuracy for different environments by modifying scaleFactor, minNeighbors, and minSize.
+- **Simple Controls:** Press q to quit the application.
