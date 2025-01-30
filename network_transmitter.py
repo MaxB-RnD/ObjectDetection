@@ -2,8 +2,8 @@ import socket  # Import the socket module to enable network communication
 import time    # Import time module to simulate periodic data sending
 
 # === CONFIGURATION ===
-HOST = "172.21.224.1" # REPLACE with C's IPv4 (WSL) address
-PORT = 5000           # Must match the server's listening port
+HOST = "192.168.0.116" # REPLACE with PC's IPv4 address
+PORT = 5000            # Must match the server's listening port
 
 
 # === CREATE A SOCKET ===
