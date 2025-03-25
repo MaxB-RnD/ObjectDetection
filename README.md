@@ -12,3 +12,6 @@ This project is a real-time face and smile detection application built with Pyth
 - **Color-Coded Visualization:** Blue rectangles for faces. Green rectangles for smiles.
 - **Customizable Detection Parameters:** Adjust sensitivity and accuracy for different environments by modifying scaleFactor, minNeighbors, and minSize.
 - **Simple Controls:** Press q to quit the application.
+
+## Network Transmission
+- Some simple code to transmit data from the Jetson Nano to a local machine on the same network.
